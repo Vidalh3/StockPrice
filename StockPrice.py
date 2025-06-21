@@ -32,8 +32,8 @@ print("##############################################\n")
 future_dates = 30
 #close_data = []
 
-# Get all rows from date columns
-df_close = df_save.loc[:, 'Adj Close']
+# Get all rows from the 'Adj Close' column as a DataFrame
+df_close = df_save.loc[:, ['Adj Close']]
 print(df_close, '\n')
 
 # Create the dependent data set 'y' as prices
@@ -46,7 +46,7 @@ save_adj.to_csv("AdjCloseData.csv")
 save_adj = pd.read_csv("AdjCloseData.csv")
 
 # Column 'the target or dependent variable' shift 'n' units up
-df_close['Prediction'] = save_adj.shift(-future_dates)
+df_close['Prediction'] = df_close['Adj Close'].shift(-future_dates)
 # Save Adj Close Data
 save_adj = pd.DataFrame(df_close)
 save_adj.to_csv("AdjCloseData.csv")
@@ -54,7 +54,7 @@ print(df_close, '\n')
 
 # Create the independent data set (X)
 # Convert dataframe to numpy array
-X = np.array(df_close.drop(['Prediction']))
+X = np.array(df_close.drop(['Prediction'], axis=1))
 # Remove the last 'n' rows
 X = X[:-future_dates]
 X.reshape(-1, 1)
